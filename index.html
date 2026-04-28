@@ -55,12 +55,31 @@
     <div id="header">
         <h1>🏃‍♂️ 코스피/코스닥 상승률 랭킹 레이스</h1>
         <p>실시간으로 가장 뜨거운 종목들의 달리기 시합입니다!</p>
+        <p id="current-time" style="color: #00d2ff; font-weight: bold; font-size: 1.1rem; margin-top: 5px;"></p>
     </div>
 
     <!-- 차트가 그려질 도화지 -->
     <div id="chart-container"></div>
 
     <script>
+        // 현재 시각을 업데이트하는 함수
+        function updateClock() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            const timeString = `${year}년 ${month}월 ${day}일 ${hours}:${minutes}:${seconds}`;
+            document.getElementById('current-time').innerText = timeString;
+        }
+        
+        // 매 초마다 시계 업데이트
+        updateClock();
+        setInterval(updateClock, 1000);
+
         const chartDom = document.getElementById('chart-container');
         const myChart = echarts.init(chartDom, 'dark', { renderer: 'canvas' });
 
