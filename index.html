@@ -218,7 +218,7 @@
                 // 가로 모드: 높이가 낮으므로 종목 수를 줄여 쾌적하게 보여줌
                 return {
                     isMobile: true,
-                    gridLeft: 110,
+                    gridLeft: 140,      // 섹터명 표시를 위해 여백 확장
                     gridRight: 50,
                     fontSize: 12,
                     maxBars: 7 // 상위 8개만 표시
@@ -227,7 +227,7 @@
                 // 세로 모드 모바일
                 return {
                     isMobile: true,
-                    gridLeft: 85,
+                    gridLeft: 100,      // 섹터명 표시를 위해 여백 확장
                     gridRight: 40,
                     fontSize: 11,
                     maxBars: 14 // 상위 15개 표시
@@ -236,7 +236,7 @@
                 // PC 또는 태블릿
                 return {
                     isMobile: false,
-                    gridLeft: 130,
+                    gridLeft: 170,      // 섹터명 표시를 위해 여백 확장
                     gridRight: 60,
                     fontSize: 16,
                     maxBars: 29 // 상위 30개 표시
@@ -317,6 +317,7 @@
                             listDiv.innerHTML = json.limit_up.map((s, idx) => `
                                 <div style="background: var(--card-bg); border: 1px solid #ffd700; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
                                     <span style="color: #ffd700; font-weight: bold;">${idx + 1}위</span> 
+                                    <span style="color: #00d2ff; font-size: 0.7rem;">[${s.sector || '일반'}]</span>
                                     <span style="color: var(--text-color); font-weight: 500;">${s.name}</span>
                                     <span style="color: var(--sub-text); font-size: 0.7rem;">(${s.time})</span>
                                 </div>
@@ -338,8 +339,8 @@
                         };
                     });
                     
-                    // 종목 이름들만 추출하여 Y축 이름표로 설정합니다.
-                    const stockNames = json.data.map(item => item.name);
+                    // [섹터] 종목명 형식으로 추출하여 Y축 이름표로 설정합니다.
+                    const stockNames = json.data.map(item => `[${item.sector || '일반'}] ${item.name}`);
                     
                     myChart.setOption({
                         yAxis: {

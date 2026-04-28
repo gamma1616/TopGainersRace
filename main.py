@@ -19,25 +19,39 @@ KIS_APP_KEY = os.getenv("KIS_APP_KEY", "")
 KIS_APP_SECRET = os.getenv("KIS_APP_SECRET", "")
 KIS_BASE_URL = "https://openapi.koreainvestment.com:9443" # 실전투자 전용 주소
 
+# 🌟 섹터 정보 (주요 종목 및 상한가 종목 우선 매핑)
+STOCK_SECTORS = {
+    "알루코": "알루미늄", "송원산업": "화학", "문배철강": "철강",
+    "한주에이알티": "이동수단", "대호특수강": "철강", "세아메카닉스": "자동차부품",
+    "아주스틸": "철강", "나우IB": "창투사", "대호특수강우": "철강",
+    "넥스틸": "철강", "포스코스틸리온": "철강", "디케이앤디": "합성피혁",
+    "금강철강": "철강", "삼성전자": "IT/반도체", "SK하이닉스": "반도체",
+    "POSCO홀딩스": "철강/지주", "현대오토에버": "IT서비스", "부국철강": "철강",
+    "하이스틸": "철강", "세아제강": "철강", "유진투자증권": "증권", "SK증권": "증권"
+}
+
+def get_sector(name):
+    return STOCK_SECTORS.get(name, "일반")
+
 # 🌟 방문자 및 상한가 데이터 관리
 VISITOR_FILE = "visitors.json"
 LIMIT_UP_FILE = "limit_up.json"
 visitor_stats = {"today": 0, "total": 0, "last_date": ""}
 # 사용자 요청으로 오늘의 상한가 명단 13개를 고정값으로 시작합니다.
 limit_up_stocks = [
-    {"name": "알루코", "time": "09:05:12", "rate": 30.0},
-    {"name": "송원산업", "time": "09:12:45", "rate": 30.0},
-    {"name": "문배철강", "time": "09:20:10", "rate": 30.0},
-    {"name": "한주에이알티", "time": "09:35:22", "rate": 30.0},
-    {"name": "대호특수강", "time": "09:48:15", "rate": 30.0},
-    {"name": "세아메카닉스", "time": "10:05:30", "rate": 30.0},
-    {"name": "아주스틸", "time": "10:15:40", "rate": 30.0},
-    {"name": "나우IB", "time": "10:42:11", "rate": 30.0},
-    {"name": "대호특수강우", "time": "11:02:55", "rate": 30.0},
-    {"name": "넥스틸", "time": "11:25:34", "rate": 30.0},
-    {"name": "포스코스틸리온", "time": "13:10:20", "rate": 30.0},
-    {"name": "디케이앤디", "time": "14:05:15", "rate": 30.0},
-    {"name": "금강철강", "time": "14:50:40", "rate": 30.0}
+    {"name": "알루코", "time": "09:05:12", "rate": 30.0, "sector": "알루미늄"},
+    {"name": "송원산업", "time": "09:12:45", "rate": 30.0, "sector": "화학"},
+    {"name": "문배철강", "time": "09:20:10", "rate": 30.0, "sector": "철강"},
+    {"name": "한주에이알티", "time": "09:35:22", "rate": 30.0, "sector": "이동수단"},
+    {"name": "대호특수강", "time": "09:48:15", "rate": 30.0, "sector": "철강"},
+    {"name": "세아메카닉스", "time": "10:05:30", "rate": 30.0, "sector": "자동차부품"},
+    {"name": "아주스틸", "time": "10:15:40", "rate": 30.0, "sector": "철강"},
+    {"name": "나우IB", "time": "10:42:11", "rate": 30.0, "sector": "창투사"},
+    {"name": "대호특수강우", "time": "11:02:55", "rate": 30.0, "sector": "철강"},
+    {"name": "넥스틸", "time": "11:25:34", "rate": 30.0, "sector": "철강"},
+    {"name": "포스코스틸리온", "time": "13:10:20", "rate": 30.0, "sector": "철강"},
+    {"name": "디케이앤디", "time": "14:05:15", "rate": 30.0, "sector": "합성피혁"},
+    {"name": "금강철강", "time": "14:50:40", "rate": 30.0, "sector": "철강"}
 ]
 
 def load_data():
@@ -176,7 +190,12 @@ def fetch_kis_data():
                         continue
                         
                     if name and rate > 0:
-                        all_data.append({"name": name, "rate": rate, "price": price})
+                        all_data.append({
+                            "name": name, 
+                            "rate": rate, 
+                            "price": price,
+                            "sector": get_sector(name)
+                        })
             else:
                 print(f"❌ [통신 실패 - {market_code}]: 상태코드 {res.status_code}, 내용: {res.text}")
                 return None
@@ -210,7 +229,8 @@ def fetch_fallback_data():
             result.append({
                 "name": name,
                 "rate": float(rate),
-                "price": 0
+                "price": 0,
+                "sector": get_sector(name)
             })
         
         if result:
@@ -248,7 +268,8 @@ def update_cache_loop():
                     limit_up_stocks.append({
                         "name": stock["name"],
                         "time": current_time,
-                        "rate": stock["rate"]
+                        "rate": stock["rate"],
+                        "sector": stock["sector"] # 섹터 정보 추가
                     })
                     limit_up_names.append(stock["name"])
                     changed = True
