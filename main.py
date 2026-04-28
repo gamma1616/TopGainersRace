@@ -19,38 +19,56 @@ KIS_APP_KEY = os.getenv("KIS_APP_KEY", "")
 KIS_APP_SECRET = os.getenv("KIS_APP_SECRET", "")
 KIS_BASE_URL = "https://openapi.koreainvestment.com:9443" # 실전투자 전용 주소
 
-# 🌟 방문자 수 관리 변수 및 파일 저장 로직
+# 🌟 방문자 및 상한가 데이터 관리
 VISITOR_FILE = "visitors.json"
+LIMIT_UP_FILE = "limit_up.json"
 visitor_stats = {"today": 0, "total": 0, "last_date": ""}
+limit_up_stocks = [] # [{"name": "종목명", "time": "10:30:15", "rate": 30.0}]
 
-def load_visitors():
-    global visitor_stats
+def load_data():
+    global visitor_stats, limit_up_stocks
+    current_date = time.strftime("%Y-%m-%d")
+    
+    # 방문자 데이터 로드
     if os.path.exists(VISITOR_FILE):
         try:
             with open(VISITOR_FILE, "r") as f:
                 import json
                 visitor_stats = json.load(f)
         except: pass
+        
+    # 상한가 데이터 로드
+    if os.path.exists(LIMIT_UP_FILE):
+        try:
+            with open(LIMIT_UP_FILE, "r") as f:
+                import json
+                data = json.load(f)
+                # 날짜가 같을 때만 상한가 리스트 유지
+                if data.get("date") == current_date:
+                    limit_up_stocks = data.get("stocks", [])
+        except: pass
 
-def save_visitors():
+def save_data():
+    import json
     with open(VISITOR_FILE, "w") as f:
-        import json
         json.dump(visitor_stats, f)
+    with open(LIMIT_UP_FILE, "w") as f:
+        json.dump({"date": time.strftime("%Y-%m-%d"), "stocks": limit_up_stocks}, f)
 
 def update_visitors():
-    global visitor_stats
+    global visitor_stats, limit_up_stocks
     current_date = time.strftime("%Y-%m-%d")
     
-    # 날짜가 바뀌었으면 오늘 방문자 초기화
     if visitor_stats["last_date"] != current_date:
         visitor_stats["today"] = 0
         visitor_stats["last_date"] = current_date
+        limit_up_stocks = [] # 날짜 바뀌면 상한가 리스트도 초기화
     
     visitor_stats["today"] += 1
     visitor_stats["total"] += 1
-    save_visitors()
+    save_data()
 
-load_visitors()
+load_data()
 
 # 🌟 핵심 캐싱 변수
 cached_data = []
@@ -188,18 +206,12 @@ def fetch_fallback_data():
 # 3. 🌟 서버 핵심 로직 (백그라운드 캐싱)
 # ==========================================
 def update_cache_loop():
-    """
-    서버가 켜지면 무한 루프를 돌면서 스스로 5초마다 최신 데이터를 가져옵니다.
-    """
-    global cached_data
+    global cached_data, limit_up_stocks
     while True:
         new_data = None
-        
-        # 1. 한투 API 우선 시도
         if KIS_APP_KEY and KIS_APP_SECRET:
             new_data = fetch_kis_data()
             
-        # 2. 한투 API 실패 시 비상망 가동
         if not new_data or len(new_data) == 0:
             new_data = fetch_fallback_data()
             
@@ -207,11 +219,28 @@ def update_cache_loop():
             new_data.sort(key=lambda x: x["rate"], reverse=True)
             cached_data = new_data[:30]
             
+            # 🌟 상한가(29.9% 이상) 종목 감지 및 선착순 기록
+            current_time = time.strftime("%H:%M:%S")
+            limit_up_names = [s["name"] for s in limit_up_stocks]
+            
+            changed = False
+            for stock in new_data:
+                if stock["rate"] >= 29.9 and stock["name"] not in limit_up_names:
+                    limit_up_stocks.append({
+                        "name": stock["name"],
+                        "time": current_time,
+                        "rate": stock["rate"]
+                    })
+                    limit_up_names.append(stock["name"])
+                    changed = True
+            
+            if changed:
+                save_data()
+            
         time.sleep(5)
 
 @app.on_event("startup")
 def startup_event():
-    """서버 전원이 켜지자마자 백그라운드 캐싱 루프 스위치를 올립니다."""
     print("🚀 서버 가동 완료! 데이터를 수집하기 시작합니다.")
     import threading
     thread = threading.Thread(target=update_cache_loop, daemon=True)
@@ -227,7 +256,8 @@ def api_get_data():
         return {
             "status": "success", 
             "data": cached_data,
-            "visitors": visitor_stats # 방문자 수 데이터 추가
+            "visitors": visitor_stats,
+            "limit_up": limit_up_stocks # 상한가 명예의 전당 데이터 추가
         }
     else:
         return {"status": "error", "message": "데이터를 준비 중입니다. 잠시만 기다려주세요."}

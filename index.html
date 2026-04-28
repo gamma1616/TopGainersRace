@@ -63,6 +63,14 @@
             오늘: <span id="today-visitors" style="color: #ff4757; font-weight: bold;">0</span>명 | 
             누적: <span id="total-visitors" style="color: #ffffff; font-weight: bold;">0</span>명
         </div>
+        
+        <!-- 🏆 상한가 명예의 전당 (선착순) -->
+        <div id="limit-up-section" style="margin-top: 15px; width: 95%; max-width: 800px;">
+            <div style="font-size: 0.9rem; color: #ffd700; font-weight: bold; margin-bottom: 5px;">🏆 오늘의 상한가 명예의 전당 (선착순)</div>
+            <div id="limit-up-list" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; min-height: 30px;">
+                <span style="color: #555; font-size: 0.8rem;">아직 상한가 종목이 없습니다.</span>
+            </div>
+        </div>
     </div>
 
     <!-- 차트가 그려질 도화지 -->
@@ -206,6 +214,20 @@
                 const json = await response.json();
                 
                 if (json.status === 'success') {
+                    // 상한가 명예의 전당 업데이트
+                    if (json.limit_up) {
+                        const listDiv = document.getElementById('limit-up-list');
+                        if (json.limit_up.length > 0) {
+                            listDiv.innerHTML = json.limit_up.map((s, idx) => `
+                                <div style="background: rgba(255, 215, 0, 0.1); border: 1px solid #ffd700; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
+                                    <span style="color: #ffd700; font-weight: bold;">${idx + 1}위</span> 
+                                    <span style="color: white;">${s.name}</span>
+                                    <span style="color: #aaa; font-size: 0.7rem;">(${s.time})</span>
+                                </div>
+                            `).join('');
+                        }
+                    }
+
                     // 방문자 수 업데이트
                     if (json.visitors) {
                         document.getElementById('today-visitors').innerText = json.visitors.today.toLocaleString();
