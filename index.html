@@ -96,16 +96,28 @@
             return colors[Math.abs(hash) % colors.length];
         }
 
-        // 모바일인지 PC인지 판별하여 왼쪽 여백 조절
-        const isMobile = window.innerWidth < 600;
+        // 모바일 여부를 판단하고 차트 설정을 동적으로 조절합니다.
+        function getChartConfig() {
+            const width = window.innerWidth;
+            const isMobile = width < 600;
+            return {
+                isMobile: isMobile,
+                gridLeft: isMobile ? 80 : 120,
+                gridRight: isMobile ? 40 : 60,
+                fontSize: isMobile ? 11 : 16,
+                maxBars: isMobile ? 14 : 29 // 0부터 시작하므로 14는 15개, 29는 30개
+            };
+        }
+
+        let config = getChartConfig();
 
         const option = {
             backgroundColor: 'transparent',
             grid: {
                 top: 10,
                 bottom: 20,
-                left: isMobile ? 85 : 120, // 스마트폰이면 글자 공간을 살짝 줄임
-                right: isMobile ? 40 : 60
+                left: config.gridLeft,
+                right: config.gridRight
             },
             xAxis: {
                 max: 'dataMax',
@@ -118,10 +130,10 @@
             yAxis: {
                 type: 'category',
                 inverse: true, 
-                max: 29,       
+                max: config.maxBars,       
                 axisLabel: {
                     show: true,
-                    fontSize: isMobile ? 12 : 16, // 폰에서 종목 이름이 너무 크지 않게
+                    fontSize: config.fontSize,
                     color: '#ffffff',
                     fontWeight: 'bold'
                 },
@@ -141,7 +153,7 @@
                         return params.value.toFixed(2) + '%';
                     },
                     color: '#ffffff',
-                    fontSize: isMobile ? 11 : 14,
+                    fontSize: config.fontSize - 2,
                     fontWeight: 'bold'
                 },
                 itemStyle: {
@@ -193,8 +205,22 @@
         // 백엔드는 5초마다 API에서 가져온 데이터를 쥐고 있으면서, 요청이 올 때마다 쥐고 있는 것만 바로 줍니다.
         setInterval(fetchAndUpdateData, 3000);
 
-        // 폰을 돌리거나 창 크기를 조절할 때 차트 크기 다시 맞추기
+        // 폰을 돌리거나 창 크기를 조절할 때 차트 설정을 다시 맞춥니다.
         window.addEventListener('resize', function() {
+            config = getChartConfig();
+            myChart.setOption({
+                grid: {
+                    left: config.gridLeft,
+                    right: config.gridRight
+                },
+                yAxis: {
+                    max: config.maxBars,
+                    axisLabel: { fontSize: config.fontSize }
+                },
+                series: [{
+                    label: { fontSize: config.fontSize - 2 }
+                }]
+            });
             myChart.resize();
         });
     </script>
