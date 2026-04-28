@@ -96,17 +96,41 @@
             return colors[Math.abs(hash) % colors.length];
         }
 
-        // 모바일 여부를 판단하고 차트 설정을 동적으로 조절합니다.
+        // 모바일 여부와 가로/세로 상태를 판단하여 설정을 조절합니다.
         function getChartConfig() {
             const width = window.innerWidth;
+            const height = window.innerHeight;
             const isMobile = width < 600;
-            return {
-                isMobile: isMobile,
-                gridLeft: isMobile ? 80 : 120,
-                gridRight: isMobile ? 40 : 60,
-                fontSize: isMobile ? 11 : 16,
-                maxBars: isMobile ? 14 : 29 // 0부터 시작하므로 14는 15개, 29는 30개
-            };
+            const isLandscape = width > height && height < 500; // 가로 모드 감지
+
+            if (isLandscape) {
+                // 가로 모드: 높이가 낮으므로 종목 수를 줄여 쾌적하게 보여줌
+                return {
+                    isMobile: true,
+                    gridLeft: 110,
+                    gridRight: 50,
+                    fontSize: 12,
+                    maxBars: 7 // 상위 8개만 표시
+                };
+            } else if (isMobile) {
+                // 세로 모드 모바일
+                return {
+                    isMobile: true,
+                    gridLeft: 85,
+                    gridRight: 40,
+                    fontSize: 11,
+                    maxBars: 14 // 상위 15개 표시
+                };
+            } else {
+                // PC 또는 태블릿
+                return {
+                    isMobile: false,
+                    gridLeft: 130,
+                    gridRight: 60,
+                    fontSize: 16,
+                    maxBars: 29 // 상위 30개 표시
+                };
+            }
         }
 
         let config = getChartConfig();
