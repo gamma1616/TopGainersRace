@@ -1,0 +1,18 @@
+{
+    "date": "2026-04-28",
+    "stocks": [
+        {"name": "\uc54c\ub8e8\ucf54", "time": "09:05:12", "rate": 30.0},
+        {"name": "\uc1a1\uc6d0\uc0b0\uc5c5", "time": "09:12:45", "rate": 30.0},
+        {"name": "\ubb38\ubc30\ucca0\uac15", "time": "09:20:10", "rate": 30.0},
+        {"name": "\ud55c\uc8fc\uc5d0\uc774\uc54c\ud2f0", "time": "09:35:22", "rate": 30.0},
+        {"name": "\ub300\ud638\ud2b9\uc218\uac15", "time": "09:48:15", "rate": 30.0},
+        {"name": "\uc138\uc544\uba54\uce74\ub2c9\uc2a4", "time": "10:05:30", "rate": 30.0},
+        {"name": "\uc544\uc8fc\uc2a4\ud2f8", "time": "10:15:40", "rate": 30.0},
+        {"name": "\ub098\uc6b0IB", "time": "10:42:11", "rate": 30.0},
+        {"name": "\ub300\ud638\ud2b9\uc218\uac15\uc6b0", "time": "11:02:55", "rate": 30.0},
+        {"name": "\ub125\uc2a4\ud2f8", "time": "11:25:34", "rate": 30.0},
+        {"name": "\ud3ec\uc2a4\ucf54\uc2a4\ud2f8\ub9ac\uc628", "time": "13:10:20", "rate": 30.0},
+        {"name": "\ub514\ucf00\uc774\uc564\ub514", "time": "14:05:15", "rate": 30.0},
+        {"name": "\uae08\uac15\ucca0\uac15", "time": "14:50:40", "rate": 30.0}
+    ]
+}
