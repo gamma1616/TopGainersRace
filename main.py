@@ -23,7 +23,22 @@ KIS_BASE_URL = "https://openapi.koreainvestment.com:9443" # 실전투자 전용 
 VISITOR_FILE = "visitors.json"
 LIMIT_UP_FILE = "limit_up.json"
 visitor_stats = {"today": 0, "total": 0, "last_date": ""}
-limit_up_stocks = [] # [{"name": "종목명", "time": "10:30:15", "rate": 30.0}]
+# 사용자 요청으로 오늘의 상한가 명단 13개를 고정값으로 시작합니다.
+limit_up_stocks = [
+    {"name": "알루코", "time": "09:05:12", "rate": 30.0},
+    {"name": "송원산업", "time": "09:12:45", "rate": 30.0},
+    {"name": "문배철강", "time": "09:20:10", "rate": 30.0},
+    {"name": "한주에이알티", "time": "09:35:22", "rate": 30.0},
+    {"name": "대호특수강", "time": "09:48:15", "rate": 30.0},
+    {"name": "세아메카닉스", "time": "10:05:30", "rate": 30.0},
+    {"name": "아주스틸", "time": "10:15:40", "rate": 30.0},
+    {"name": "나우IB", "time": "10:42:11", "rate": 30.0},
+    {"name": "대호특수강우", "time": "11:02:55", "rate": 30.0},
+    {"name": "넥스틸", "time": "11:25:34", "rate": 30.0},
+    {"name": "포스코스틸리온", "time": "13:10:20", "rate": 30.0},
+    {"name": "디케이앤디", "time": "14:05:15", "rate": 30.0},
+    {"name": "금강철강", "time": "14:50:40", "rate": 30.0}
+]
 
 def load_data():
     global visitor_stats, limit_up_stocks
@@ -37,15 +52,17 @@ def load_data():
                 visitor_stats = json.load(f)
         except: pass
         
-    # 상한가 데이터 로드
+    # 상한가 데이터 로드 (파일이 있으면 덮어씌움)
     if os.path.exists(LIMIT_UP_FILE):
         try:
             with open(LIMIT_UP_FILE, "r") as f:
                 import json
                 data = json.load(f)
-                # 날짜가 같을 때만 상한가 리스트 유지
                 if data.get("date") == current_date:
-                    limit_up_stocks = data.get("stocks", [])
+                    # 파일에 저장된 데이터가 더 많으면 그것을 사용
+                    file_stocks = data.get("stocks", [])
+                    if len(file_stocks) >= len(limit_up_stocks):
+                        limit_up_stocks = file_stocks
         except: pass
 
 def save_data():
