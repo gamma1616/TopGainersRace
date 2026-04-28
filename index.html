@@ -56,6 +56,10 @@
         <h1>🏃‍♂️ 코스피/코스닥 상승률 랭킹 레이스</h1>
         <p>실시간으로 가장 뜨거운 종목들의 달리기 시합입니다!</p>
         <p id="current-time" style="color: #00d2ff; font-weight: bold; font-size: 1.1rem; margin-top: 5px;"></p>
+        <div id="visitor-container" style="font-size: 0.85rem; color: #888; margin-top: 8px;">
+            오늘: <span id="today-visitors" style="color: #ff4757; font-weight: bold;">0</span>명 | 
+            누적: <span id="total-visitors" style="color: #ffffff; font-weight: bold;">0</span>명
+        </div>
     </div>
 
     <!-- 차트가 그려질 도화지 -->
@@ -199,6 +203,12 @@
                 const json = await response.json();
                 
                 if (json.status === 'success') {
+                    // 방문자 수 업데이트
+                    if (json.visitors) {
+                        document.getElementById('today-visitors').innerText = json.visitors.today.toLocaleString();
+                        document.getElementById('total-visitors').innerText = json.visitors.total.toLocaleString();
+                    }
+
                     const chartData = json.data.map(item => {
                         return {
                             value: item.rate, 

@@ -19,7 +19,40 @@ KIS_APP_KEY = os.getenv("KIS_APP_KEY", "")
 KIS_APP_SECRET = os.getenv("KIS_APP_SECRET", "")
 KIS_BASE_URL = "https://openapi.koreainvestment.com:9443" # 실전투자 전용 주소
 
-# 🌟 핵심 캐싱 변수: 수천 명이 동시 접속해도 이 메모리 안의 데이터만 나눠주어 서버를 보호합니다.
+# 🌟 방문자 수 관리 변수 및 파일 저장 로직
+VISITOR_FILE = "visitors.json"
+visitor_stats = {"today": 0, "total": 0, "last_date": ""}
+
+def load_visitors():
+    global visitor_stats
+    if os.path.exists(VISITOR_FILE):
+        try:
+            with open(VISITOR_FILE, "r") as f:
+                import json
+                visitor_stats = json.load(f)
+        except: pass
+
+def save_visitors():
+    with open(VISITOR_FILE, "w") as f:
+        import json
+        json.dump(visitor_stats, f)
+
+def update_visitors():
+    global visitor_stats
+    current_date = time.strftime("%Y-%m-%d")
+    
+    # 날짜가 바뀌었으면 오늘 방문자 초기화
+    if visitor_stats["last_date"] != current_date:
+        visitor_stats["today"] = 0
+        visitor_stats["last_date"] = current_date
+    
+    visitor_stats["today"] += 1
+    visitor_stats["total"] += 1
+    save_visitors()
+
+load_visitors()
+
+# 🌟 핵심 캐싱 변수
 cached_data = []
 kis_token_info = {"access_token": "", "expires_at": 0}
 
@@ -191,12 +224,19 @@ def startup_event():
 @app.get("/api/data")
 def api_get_data():
     if cached_data:
-        return {"status": "success", "data": cached_data}
+        return {
+            "status": "success", 
+            "data": cached_data,
+            "visitors": visitor_stats # 방문자 수 데이터 추가
+        }
     else:
         return {"status": "error", "message": "데이터를 준비 중입니다. 잠시만 기다려주세요."}
 
 @app.get("/", response_class=HTMLResponse)
 def read_root():
+    # 메인 페이지 접속 시 방문자 수 증가
+    update_visitors()
+    
     file_path = os.path.join(os.path.dirname(__file__), "index.html")
     with open(file_path, "r", encoding="utf-8") as f:
         return f.read()
