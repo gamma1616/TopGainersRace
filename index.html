@@ -160,7 +160,10 @@
                 },
                 yAxis: {
                     axisLabel: { color: isLight ? '#1a1a1a' : '#ffffff' }
-                }
+                },
+                series: [{
+                    label: { color: isLight ? '#1a1a1a' : '#ffffff' }
+                }]
             });
         }
 
@@ -306,10 +309,10 @@
                         const listDiv = document.getElementById('limit-up-list');
                         if (json.limit_up.length > 0) {
                             listDiv.innerHTML = json.limit_up.map((s, idx) => `
-                                <div style="background: rgba(255, 215, 0, 0.1); border: 1px solid #ffd700; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
+                                <div style="background: var(--card-bg); border: 1px solid #ffd700; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
                                     <span style="color: #ffd700; font-weight: bold;">${idx + 1}위</span> 
-                                    <span style="color: white;">${s.name}</span>
-                                    <span style="color: #aaa; font-size: 0.7rem;">(${s.time})</span>
+                                    <span style="color: var(--text-color); font-weight: 500;">${s.name}</span>
+                                    <span style="color: var(--sub-text); font-size: 0.7rem;">(${s.time})</span>
                                 </div>
                             `).join('');
                         }
