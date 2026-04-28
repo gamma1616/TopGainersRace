@@ -56,13 +56,15 @@
 <body>
 
     <div id="header">
-        <h1>🏃‍♂️ 코스피/코스닥 상승률 랭킹 레이스 (v2)</h1>
+        <div style="display: flex; align-items: baseline; justify-content: center; gap: 15px; flex-wrap: wrap;">
+            <h1>🏃‍♂️ 코스피/코스닥 상승률 랭킹 레이스 (v2)</h1>
+            <div id="visitor-container" style="font-size: 0.85rem; color: #888;">
+                오늘: <span id="today-visitors" style="color: #ff4757; font-weight: bold;">0</span>명 | 
+                누적: <span id="total-visitors" style="color: #ffffff; font-weight: bold;">0</span>명
+            </div>
+        </div>
         <p>실시간으로 가장 뜨거운 종목들의 달리기 시합입니다!</p>
         <p id="current-time" style="color: #00d2ff; font-weight: bold; font-size: 1.1rem; margin-top: 5px;"></p>
-        <div id="visitor-container" style="font-size: 0.85rem; color: #888; margin-top: 8px;">
-            오늘: <span id="today-visitors" style="color: #ff4757; font-weight: bold;">0</span>명 | 
-            누적: <span id="total-visitors" style="color: #ffffff; font-weight: bold;">0</span>명
-        </div>
         
         <!-- 🏆 상한가 명예의 전당 (선착순) -->
         <div id="limit-up-section" style="margin: 20px auto 0 auto; width: 95%; max-width: 900px; text-align: center;">
