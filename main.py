@@ -101,8 +101,8 @@ def fetch_kis_data():
                     rate = float(item.get("prdy_ctrt", 0))
                     price = int(item.get("stck_prpr", 0))
                     
-                    # ETF, ETN 종목 제외 필터링
-                    if "ETF" in name.upper() or "ETN" in name.upper():
+                    # ETF, ETN, 레버리지 종목 제외 필터링
+                    if any(kw in name.upper() for kw in ["ETF", "ETN", "레버리지"]):
                         continue
                         
                     if name and rate > 0:
@@ -133,8 +133,8 @@ def fetch_fallback_data():
         
         result = []
         for name, rate in zip(names, rates):
-            # ETF, ETN 종목 제외 필터링
-            if "ETF" in name.upper() or "ETN" in name.upper():
+            # ETF, ETN, 레버리지 종목 제외 필터링
+            if any(kw in name.upper() for kw in ["ETF", "ETN", "레버리지"]):
                 continue
                 
             result.append({
@@ -144,7 +144,7 @@ def fetch_fallback_data():
             })
         
         if result:
-            print(f"✅ [비상망] 네이버에서 {len(result)}개 종목을 가져왔습니다. (ETF/ETN 제외 완료)")
+            print(f"✅ [비상망] 네이버에서 {len(result)}개 종목을 가져왔습니다. (필터링 완료)")
         return result
     except Exception as e:
         print(f"❌ [비상망 에러]: {e}")
