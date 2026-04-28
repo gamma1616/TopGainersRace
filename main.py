@@ -100,6 +100,11 @@ def fetch_kis_data():
                     name = item.get("hts_kor_isnm", "")
                     rate = float(item.get("prdy_ctrt", 0))
                     price = int(item.get("stck_prpr", 0))
+                    
+                    # ETF, ETN 종목 제외 필터링
+                    if "ETF" in name.upper() or "ETN" in name.upper():
+                        continue
+                        
                     if name and rate > 0:
                         all_data.append({"name": name, "rate": rate, "price": price})
             else:
@@ -114,7 +119,6 @@ def fetch_kis_data():
 def fetch_fallback_data():
     """
     [비상망 가동] 네이버 금융 웹 페이지를 직접 읽어 데이터를 가져옵니다.
-    공식 API가 막혀도 웹사이트가 떠 있는 한 작동하는 강력한 방식입니다.
     """
     try:
         import re
@@ -129,14 +133,18 @@ def fetch_fallback_data():
         
         result = []
         for name, rate in zip(names, rates):
+            # ETF, ETN 종목 제외 필터링
+            if "ETF" in name.upper() or "ETN" in name.upper():
+                continue
+                
             result.append({
                 "name": name,
                 "rate": float(rate),
-                "price": 0 # 웹에서는 가격 정보 파싱이 더 복잡하여 생략 (화면에는 영향 없음)
+                "price": 0
             })
         
         if result:
-            print(f"✅ [비상망] 네이버에서 {len(result)}개 종목을 성공적으로 가져왔습니다.")
+            print(f"✅ [비상망] 네이버에서 {len(result)}개 종목을 가져왔습니다. (ETF/ETN 제외 완료)")
         return result
     except Exception as e:
         print(f"❌ [비상망 에러]: {e}")
