@@ -8,16 +8,56 @@
     <!-- ECharts 라이브러리 -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --text-color: #ffffff;
+            --sub-text: #aaaaaa;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border-color: #222;
+        }
+
+        [data-theme='light'] {
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --sub-text: #666666;
+            --card-bg: rgba(0, 0, 0, 0.03);
+            --border-color: #eeeeee;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            background-color: #121212;
-            color: white;
-            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Pretendard', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
+            transition: background-color 0.3s, color 0.3s;
         }
+
+        /* 테마 토글 버튼 스타일 */
+        #theme-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        #theme-toggle:hover { transform: scale(1.05); }
+
         #header {
             margin-top: 15px;
             text-align: center;
@@ -29,15 +69,15 @@
             margin: 0;
             color: #ff4757;
             font-size: 1.8rem;
-            text-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+            text-shadow: 0 0 10px rgba(255, 71, 87, 0.3);
         }
         #header p {
-            color: #aaaaaa;
+            color: var(--sub-text);
             font-size: 0.9rem;
             margin-top: 5px;
         }
         #chart-container {
-            width: 65vw; /* 전체 폭을 약 30% 줄임 */
+            width: 65vw;
             height: 85vh; 
             margin-top: 5px;
         }
@@ -47,13 +87,19 @@
             #header h1 { font-size: 1.3rem; }
             #header p { font-size: 0.8rem; }
             #chart-container { 
-                width: 85vw; /* 모바일은 너무 좁아지지 않게 85% 유지 */
+                width: 85vw;
                 height: 80vh; 
             }
+            #theme-toggle { top: 10px; right: 10px; }
         }
     </style>
 </head>
 <body>
+    <!-- 테마 전환 버튼 -->
+    <button id="theme-toggle" onclick="toggleTheme()">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">다크 모드</span>
+    </button>
 
     <div id="header">
         <div style="display: flex; align-items: baseline; justify-content: center; gap: 15px; flex-wrap: wrap;">
@@ -81,6 +127,43 @@
     <div id="chart-container"></div>
 
     <script>
+        // 테마 전환 기능
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            
+            // 버튼 텍스트 및 아이콘 변경
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            
+            if (newTheme === 'light') {
+                themeIcon.innerText = '☀️';
+                themeText.innerText = '화이트 모드';
+            } else {
+                themeIcon.innerText = '🌙';
+                themeText.innerText = '다크 모드';
+            }
+            
+            // 차트 테마 업데이트 (축 색상 등)
+            updateChartTheme(newTheme);
+        }
+
+        function updateChartTheme(theme) {
+            const isLight = theme === 'light';
+            myChart.setOption({
+                xAxis: {
+                    axisLabel: { color: isLight ? '#666' : '#aaa' },
+                    splitLine: { lineStyle: { color: isLight ? '#eee' : '#333' } }
+                },
+                yAxis: {
+                    axisLabel: { color: isLight ? '#1a1a1a' : '#ffffff' }
+                }
+            });
+        }
+
         // 현재 시각을 업데이트하는 함수
         function updateClock() {
             const now = new Date();
@@ -287,19 +370,19 @@
             myChart.resize();
         });
     </script>
-    <div id="footer" style="margin-top: 50px; padding: 40px 10px; width: 100%; text-align: center; color: #666; border-top: 1px solid #222; font-size: 0.8rem; line-height: 1.6; background: rgba(0,0,0,0.2);">
-        <div style="font-weight: bold; color: #999; margin-bottom: 5px; font-size: 0.95rem; letter-spacing: 1px;">
+    <div id="footer" style="margin-top: 50px; padding: 40px 10px; width: 100%; text-align: center; color: var(--sub-text); border-top: 1px solid var(--border-color); font-size: 0.8rem; line-height: 1.6; background: var(--card-bg);">
+        <div style="font-weight: bold; color: var(--text-color); margin-bottom: 5px; font-size: 0.95rem; letter-spacing: 1px;">
             감마렉스맥스 (Gamma Lexmax)
         </div>
         <div style="margin-bottom: 15px;">
             광고문의 : <a href="mailto:gammalex@gmail.com" style="color: #00d2ff; text-decoration: none;">gammalex@gmail.com</a>
         </div>
-        <div style="max-width: 800px; margin: 0 auto; color: #555; padding: 0 20px;">
+        <div style="max-width: 800px; margin: 0 auto; color: var(--sub-text); padding: 0 20px;">
             <strong>[투자 면책 조항]</strong><br>
             본 서비스에서 제공하는 모든 정보는 투자 판단을 위한 참고용이며, 데이터 제공 지연이나 오류가 발생할 수 있습니다. 
             투자에 대한 최종 결정과 책임은 투자자 본인에게 있으며, 본 서비스는 어떠한 경우에도 투자 결과에 대한 법적 책임을 지지 않습니다.
         </div>
-        <div style="margin-top: 25px; font-size: 0.7rem; color: #444;">
+        <div style="margin-top: 25px; font-size: 0.7rem; color: #555;">
             &copy; 2026 Gamma Lexmax. All rights reserved.
         </div>
     </div>
