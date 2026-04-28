@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <!-- 모바일 기기에서 화면이 깨지지 않고 딱 맞게 보이도록 하는 설정 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔥 실시간 국내 주식 달리기 시합</title>
+    <!-- ECharts 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: white;
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #header {
+            margin-top: 15px;
+            text-align: center;
+            width: 100%;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+        #header h1 {
+            margin: 0;
+            color: #ff4757;
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+        }
+        #header p {
+            color: #aaaaaa;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        #chart-container {
+            width: 95vw;
+            height: 85vh; /* 스크롤 없이 한 화면에 딱 들어오도록 세팅 */
+            margin-top: 5px;
+        }
+
+        /* 스마트폰 세로 화면일 때 글씨 크기 조절 (반응형) */
+        @media (max-width: 600px) {
+            #header h1 { font-size: 1.3rem; }
+            #header p { font-size: 0.8rem; }
+            #chart-container { height: 80vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="header">
+        <h1>🏃‍♂️ 코스피/코스닥 상승률 랭킹 레이스</h1>
+        <p>실시간으로 가장 뜨거운 종목들의 달리기 시합입니다!</p>
+    </div>
+
+    <!-- 차트가 그려질 도화지 -->
+    <div id="chart-container"></div>
+
+    <script>
+        const chartDom = document.getElementById('chart-container');
+        const myChart = echarts.init(chartDom, 'dark', { renderer: 'canvas' });
+
+        const colors = [
+            '#ff4757', '#ffa502', '#2ed573', '#1e90ff', '#ff6b81', 
+            '#eccc68', '#ff7f50', '#a4b0be', '#5352ed', '#ff9f43'
+        ];
+
+        function getColorForStock(stockName) {
+            let hash = 0;
+            for (let i = 0; i < stockName.length; i++) {
+                hash = stockName.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return colors[Math.abs(hash) % colors.length];
+        }
+
+        // 모바일인지 PC인지 판별하여 왼쪽 여백 조절
+        const isMobile = window.innerWidth < 600;
+
+        const option = {
+            backgroundColor: 'transparent',
+            grid: {
+                top: 10,
+                bottom: 20,
+                left: isMobile ? 85 : 120, // 스마트폰이면 글자 공간을 살짝 줄임
+                right: isMobile ? 40 : 60
+            },
+            xAxis: {
+                max: 'dataMax',
+                axisLabel: {
+                    formatter: '{value}%',
+                    color: '#aaaaaa'
+                },
+                splitLine: { show: true, lineStyle: { color: '#333', type: 'dashed' } }
+            },
+            yAxis: {
+                type: 'category',
+                inverse: true, 
+                max: 29,       
+                axisLabel: {
+                    show: true,
+                    fontSize: isMobile ? 12 : 16, // 폰에서 종목 이름이 너무 크지 않게
+                    color: '#ffffff',
+                    fontWeight: 'bold'
+                },
+                animationDuration: 300,
+                animationDurationUpdate: 300
+            },
+            series: [{
+                realtimeSort: true, 
+                name: '상승률',
+                type: 'bar',
+                data: [],
+                label: {
+                    show: true,
+                    position: 'right',
+                    valueAnimation: true,
+                    formatter: function(params) {
+                        return params.value.toFixed(2) + '%';
+                    },
+                    color: '#ffffff',
+                    fontSize: isMobile ? 11 : 14,
+                    fontWeight: 'bold'
+                },
+                itemStyle: {
+                    borderRadius: [0, 10, 10, 0]
+                }
+            }],
+            animationDuration: 0,
+            animationDurationUpdate: 3000, 
+            animationEasing: 'linear',
+            animationEasingUpdate: 'linear'
+        };
+
+        myChart.setOption(option);
+
+        // 캐싱된 데이터를 가져오므로 백엔드 서버가 아주 빠르고 가볍게 응답합니다.
+        async function fetchAndUpdateData() {
+            try {
+                const response = await fetch('/api/data');
+                const json = await response.json();
+                
+                if (json.status === 'success') {
+                    const chartData = json.data.map(item => {
+                        return {
+                            value: item.rate, 
+                            name: item.name,  
+                            itemStyle: { color: getColorForStock(item.name) }
+                        };
+                    });
+                    
+                    myChart.setOption({
+                        series: [{
+                            data: chartData
+                        }]
+                    });
+                }
+            } catch (error) {
+                console.error("데이터 가져오기 실패:", error);
+            }
+        }
+
+        fetchAndUpdateData();
+        // 화면도 3초마다 데이터를 달라고 조릅니다.
+        // 백엔드는 5초마다 API에서 가져온 데이터를 쥐고 있으면서, 요청이 올 때마다 쥐고 있는 것만 바로 줍니다.
+        setInterval(fetchAndUpdateData, 3000);
+
+        // 폰을 돌리거나 창 크기를 조절할 때 차트 크기 다시 맞추기
+        window.addEventListener('resize', function() {
+            myChart.resize();
+        });
+    </script>
+</body>
+</html>
