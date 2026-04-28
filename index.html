@@ -152,7 +152,13 @@
                         };
                     });
                     
+                    // 종목 이름들만 추출하여 Y축 이름표로 설정합니다.
+                    const stockNames = json.data.map(item => item.name);
+                    
                     myChart.setOption({
+                        yAxis: {
+                            data: stockNames
+                        },
                         series: [{
                             data: chartData
                         }]
