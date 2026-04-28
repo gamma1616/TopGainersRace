@@ -52,17 +52,19 @@ def load_data():
                 visitor_stats = json.load(f)
         except: pass
         
-    # 상한가 데이터 로드 (파일이 있으면 덮어씌움)
+    # 상한가 데이터 로드
     if os.path.exists(LIMIT_UP_FILE):
         try:
             with open(LIMIT_UP_FILE, "r") as f:
                 import json
                 data = json.load(f)
                 if data.get("date") == current_date:
-                    # 파일에 저장된 데이터가 더 많으면 그것을 사용
                     file_stocks = data.get("stocks", [])
-                    if len(file_stocks) >= len(limit_up_stocks):
-                        limit_up_stocks = file_stocks
+                    # 하드코딩된 명단과 파일의 명단을 합칩니다 (중복 제거)
+                    existing_names = [s["name"] for s in limit_up_stocks]
+                    for fs in file_stocks:
+                        if fs["name"] not in existing_names:
+                            limit_up_stocks.append(fs)
         except: pass
 
 def save_data():
