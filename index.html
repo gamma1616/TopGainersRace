@@ -37,16 +37,19 @@
             margin-top: 5px;
         }
         #chart-container {
-            width: 95vw;
-            height: 85vh; /* 스크롤 없이 한 화면에 딱 들어오도록 세팅 */
+            width: 65vw; /* 전체 폭을 약 30% 줄임 */
+            height: 85vh; 
             margin-top: 5px;
         }
 
-        /* 스마트폰 세로 화면일 때 글씨 크기 조절 (반응형) */
+        /* 스마트폰 세로 화면일 때 설정 */
         @media (max-width: 600px) {
             #header h1 { font-size: 1.3rem; }
             #header p { font-size: 0.8rem; }
-            #chart-container { height: 80vh; }
+            #chart-container { 
+                width: 85vw; /* 모바일은 너무 좁아지지 않게 85% 유지 */
+                height: 80vh; 
+            }
         }
     </style>
 </head>
