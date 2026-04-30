@@ -257,12 +257,13 @@
             const isMobile = width < 600;
             const isLandscape = width > height && height < 500;
 
+            // 30개 종목을 모두 보여주기 위해 maxBars=29로 통일하고, 폰트는 화면 크기에 맞춰 축소
             if (isLandscape) {
-                return { isMobile: true, gridLeft: 140, gridRight: 50, fontSize: 12, maxBars: 7 };
+                return { isMobile: true, gridLeft: 100, gridRight: 40, fontSize: 8, maxBars: 29 };
             } else if (isMobile) {
-                return { isMobile: true, gridLeft: 130, gridRight: 40, fontSize: 11, maxBars: 14 };
+                return { isMobile: true, gridLeft: 105, gridRight: 35, fontSize: 9, maxBars: 29 };
             } else {
-                return { isMobile: false, gridLeft: 180, gridRight: 60, fontSize: 16, maxBars: 29 };
+                return { isMobile: false, gridLeft: 150, gridRight: 55, fontSize: 12, maxBars: 29 };
             }
         }
 
@@ -294,7 +295,7 @@
                     valueAnimation: true,
                     formatter: function(params) { return params.value.toFixed(2) + '%'; },
                     color: '#ffffff',
-                    fontSize: config.fontSize - 2,
+                    fontSize: Math.max(8, config.fontSize - 1),
                     fontWeight: 'bold'
                 },
                 itemStyle: { borderRadius: [0, 10, 10, 0] }
@@ -411,7 +412,7 @@
             myChart.setOption({
                 grid: { left: config.gridLeft, right: config.gridRight },
                 yAxis: { max: config.maxBars, axisLabel: { fontSize: config.fontSize } },
-                series: [{ label: { fontSize: config.fontSize - 2 } }]
+                series: [{ label: { fontSize: Math.max(8, config.fontSize - 1) } }]
             });
             myChart.resize();
         });
