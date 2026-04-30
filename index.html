@@ -257,13 +257,13 @@
             const isMobile = width < 600;
             const isLandscape = width > height && height < 500;
 
-            // 30개 종목을 모두 보여주기 위해 maxBars=29로 통일하고, 폰트는 화면 크기에 맞춰 축소
+            // 30개 종목 모두 표시 + [시장 | 섹터] 종목명 형식 수용을 위해 라벨 영역(gridLeft) 확대
             if (isLandscape) {
-                return { isMobile: true, gridLeft: 100, gridRight: 40, fontSize: 8, maxBars: 29 };
+                return { isMobile: true, gridLeft: 135, gridRight: 35, fontSize: 7, maxBars: 29 };
             } else if (isMobile) {
-                return { isMobile: true, gridLeft: 105, gridRight: 35, fontSize: 9, maxBars: 29 };
+                return { isMobile: true, gridLeft: 145, gridRight: 30, fontSize: 8, maxBars: 29 };
             } else {
-                return { isMobile: false, gridLeft: 150, gridRight: 55, fontSize: 12, maxBars: 29 };
+                return { isMobile: false, gridLeft: 210, gridRight: 50, fontSize: 11, maxBars: 29 };
             }
         }
 
@@ -391,7 +391,10 @@
                         name: item.name,
                         itemStyle: { color: getColorForStock(item.name) }
                     }));
-                    const stockNames = json.data.map(item => `[${item.market || ''}] ${item.name}`);
+                    const stockNames = json.data.map(item => {
+                        const sectorText = item.sector && item.sector !== '일반' ? ` | ${item.sector}` : '';
+                        return `[${item.market || ''}${sectorText}] ${item.name}`;
+                    });
                     myChart.setOption({
                         yAxis: { data: stockNames },
                         series: [{ data: chartData }]
