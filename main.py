@@ -17,17 +17,23 @@ app = FastAPI()
 # ==========================================
 KIS_APP_KEY = os.getenv("KIS_APP_KEY", "")
 KIS_APP_SECRET = os.getenv("KIS_APP_SECRET", "")
-KIS_BASE_URL = "https://openapi.koreainvestment.com:9443" # 실전투자 전용 주소
+KIS_BASE_URL = os.getenv("KIS_BASE_URL", "https://openapi.koreainvestment.com:9443")
 
-# 🌟 섹터 정보 (주요 종목 및 상한가 종목 우선 매핑)
+# 🌟 시장 및 섹터 정보
+MARKET_NAMES = {"J": "코스피", "W": "코스닥", 0: "코스피", 1: "코스닥"}
+
+# 주요 종목 섹터 매핑 (예시 데이터)
 STOCK_SECTORS = {
     "알루코": "알루미늄", "송원산업": "화학", "문배철강": "철강",
-    "한주에이알티": "이동수단", "대호특수강": "철강", "세아메카닉스": "자동차부품",
+    "한주에이알티": "2차전지/장비", "대호특수강": "철강", "세아메카닉스": "전기차/부품",
     "아주스틸": "철강", "나우IB": "창투사", "대호특수강우": "철강",
-    "넥스틸": "철강", "포스코스틸리온": "철강", "디케이앤디": "합성피혁",
+    "넥스틸": "철강", "포스코스틸리온": "철강", "디케이앤디": "의류/피혁",
     "금강철강": "철강", "삼성전자": "IT/반도체", "SK하이닉스": "반도체",
-    "POSCO홀딩스": "철강/지주", "현대오토에버": "IT서비스", "부국철강": "철강",
-    "하이스틸": "철강", "세아제강": "철강", "유진투자증권": "증권", "SK증권": "증권"
+    "POSCO홀딩스": "철강/지주", "현대오토에버": "자율주행", "부국철강": "철강",
+    "하이스틸": "철강", "세아제강": "철강", "유진투자증권": "증권", "SK증권": "증권",
+    "에코프로": "2차전지", "에코프로비엠": "2차전지", "카카오": "IT서비스",
+    "NAVER": "IT서비스", "현대차": "자동차", "기아": "자동차",
+    "셀트리온": "바이오", "HLB": "바이오/제약"
 }
 
 def get_sector(name):
@@ -39,19 +45,19 @@ LIMIT_UP_FILE = "limit_up.json"
 visitor_stats = {"today": 0, "total": 0, "last_date": ""}
 # 사용자 요청으로 오늘의 상한가 명단 13개를 고정값으로 시작합니다.
 limit_up_stocks = [
-    {"name": "알루코", "time": "09:05:12", "rate": 30.0, "sector": "알루미늄"},
-    {"name": "송원산업", "time": "09:12:45", "rate": 30.0, "sector": "화학"},
-    {"name": "문배철강", "time": "09:20:10", "rate": 30.0, "sector": "철강"},
-    {"name": "한주에이알티", "time": "09:35:22", "rate": 30.0, "sector": "이동수단"},
-    {"name": "대호특수강", "time": "09:48:15", "rate": 30.0, "sector": "철강"},
-    {"name": "세아메카닉스", "time": "10:05:30", "rate": 30.0, "sector": "자동차부품"},
-    {"name": "아주스틸", "time": "10:15:40", "rate": 30.0, "sector": "철강"},
-    {"name": "나우IB", "time": "10:42:11", "rate": 30.0, "sector": "창투사"},
-    {"name": "대호특수강우", "time": "11:02:55", "rate": 30.0, "sector": "철강"},
-    {"name": "넥스틸", "time": "11:25:34", "rate": 30.0, "sector": "철강"},
-    {"name": "포스코스틸리온", "time": "13:10:20", "rate": 30.0, "sector": "철강"},
-    {"name": "디케이앤디", "time": "14:05:15", "rate": 30.0, "sector": "합성피혁"},
-    {"name": "금강철강", "time": "14:50:40", "rate": 30.0, "sector": "철강"}
+    {"name": "알루코", "time": "09:05:12", "rate": 30.0, "market": "코스피", "sector": "알루미늄"},
+    {"name": "송원산업", "time": "09:12:45", "rate": 30.0, "market": "코스피", "sector": "화학"},
+    {"name": "문배철강", "time": "09:20:10", "rate": 30.0, "market": "코스피", "sector": "철강"},
+    {"name": "한주에이알티", "time": "09:35:22", "rate": 30.0, "market": "코스닥", "sector": "2차전지/장비"},
+    {"name": "대호특수강", "time": "09:48:15", "rate": 30.0, "market": "코스피", "sector": "철강"},
+    {"name": "세아메카닉스", "time": "10:05:30", "rate": 30.0, "market": "코스닥", "sector": "전기차/부품"},
+    {"name": "아주스틸", "time": "10:15:40", "rate": 30.0, "market": "코스피", "sector": "철강"},
+    {"name": "나우IB", "time": "10:42:11", "rate": 30.0, "market": "코스닥", "sector": "창투사"},
+    {"name": "대호특수강우", "time": "11:02:55", "rate": 30.0, "market": "코스피", "sector": "철강"},
+    {"name": "넥스틸", "time": "11:25:34", "rate": 30.0, "market": "코스피", "sector": "철강"},
+    {"name": "포스코스틸리온", "time": "13:10:20", "rate": 30.0, "market": "코스피", "sector": "철강"},
+    {"name": "디케이앤디", "time": "14:05:15", "rate": 30.0, "market": "코스닥", "sector": "의류/피혁"},
+    {"name": "금강철강", "time": "14:50:40", "rate": 30.0, "market": "코스피", "sector": "철강"}
 ]
 
 def load_data():
@@ -185,8 +191,9 @@ def fetch_kis_data():
                     rate = float(item.get("prdy_ctrt", 0))
                     price = int(item.get("stck_prpr", 0))
                     
-                    # ETF, ETN, 레버리지 종목 제외 필터링
-                    if any(kw in name.upper() for kw in ["ETF", "ETN", "레버리지"]):
+                    # ETF, ETN, 레버리지, 인버스, 선물, 스팩, 액티브 등 제외 필터링 (가독성 및 순수 주식 랭킹 목적)
+                    exclude_keywords = ["ETF", "ETN", "레버리지", "인버스", "선물", "스팩", "액티브", "KODEX", "TIGER", "ACE", "HANARO", "KBSTAR", "SOL", "ARIRANG", "RISE", "RO"]
+                    if any(kw in name.upper() for kw in exclude_keywords):
                         continue
                         
                     if name and rate > 0:
@@ -194,6 +201,7 @@ def fetch_kis_data():
                             "name": name, 
                             "rate": rate, 
                             "price": price,
+                            "market": MARKET_NAMES.get(market_code, ""),
                             "sector": get_sector(name)
                         })
             else:
@@ -208,37 +216,79 @@ def fetch_kis_data():
 def fetch_fallback_data():
     """
     [비상망 가동] 네이버 금융 웹 페이지를 직접 읽어 데이터를 가져옵니다.
+    코스피(sosok=0)와 코스닥(sosok=1) 양쪽 모두 가져와서 합칩니다.
+    각 행(TR)에서 종목명과 등락률을 함께 추출하여 매칭 오류를 방지합니다.
     """
-    try:
-        import re
-        url = "https://finance.naver.com/sise/sise_rise.naver"
-        res = requests.get(url, timeout=5)
-        res.encoding = 'euc-kr'
-        html = res.text
-        
-        # 종목명과 등락률 추출
-        names = re.findall(r'class="tltle">([^<]+)</a>', html)
-        rates = re.findall(r'<span class="tah p11 (?:red01|nv01)">\s*([+-]?[\d\.]+)%\s*</span>', html)
-        
-        result = []
-        for name, rate in zip(names, rates):
-            # ETF, ETN, 레버리지 종목 제외 필터링
-            if any(kw in name.upper() for kw in ["ETF", "ETN", "레버리지"]):
-                continue
+    import re
+    
+    def crawl_naver_rise(sosok):
+        """네이버 금융 상승 종목 페이지를 크롤링합니다.
+        sosok: 0=코스피, 1=코스닥
+        """
+        try:
+            url = f"https://finance.naver.com/sise/sise_rise.naver?sosok={sosok}"
+            res = requests.get(url, timeout=5)
+            res.encoding = 'euc-kr'
+            html = res.text
+            
+            # 각 테이블 행(TR)을 개별적으로 파싱하여 종목명-등락률을 정확히 1:1 매칭
+            rows = re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.DOTALL)
+            
+            items = []
+            for row in rows:
+                # 종목명이 있는 행만 처리
+                name_match = re.search(r'class="tltle">([^<]+)</a>', row)
+                if not name_match:
+                    continue
                 
-            result.append({
-                "name": name,
-                "rate": float(rate),
-                "price": 0,
-                "sector": get_sector(name)
-            })
-        
-        if result:
-            print(f"✅ [비상망] 네이버에서 {len(result)}개 종목을 가져왔습니다. (필터링 완료)")
-        return result
-    except Exception as e:
-        print(f"❌ [비상망 에러]: {e}")
-    return []
+                name = name_match.group(1).strip()
+                
+                # ETF, ETN, 레버리지, 인버스, 선물, 스팩, 액티브 등 제외 필터링
+                exclude_keywords = ["ETF", "ETN", "레버리지", "인버스", "선물", "스팩", "액티브", "KODEX", "TIGER", "ACE", "HANARO", "KBSTAR", "SOL", "ARIRANG", "RISE", "RO"]
+                if any(kw in name.upper() for kw in exclude_keywords):
+                    continue
+                
+                # 해당 행의 TD들을 추출하여 등락률(4번째 숫자 TD) 가져오기
+                tds = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL)
+                
+                # 등락률은 보통 TD[4]에 있음 (등락률 컬럼)
+                rate = 0.0
+                if len(tds) >= 5:
+                    rate_match = re.search(r'([\d\.]+)%', tds[4])
+                    if rate_match:
+                        rate = float(rate_match.group(1))
+                
+                # 등락률이 0 이하면 상승 종목이 아니므로 건너뜀
+                if rate <= 0:
+                    continue
+                
+                # 현재가 추출 (TD[2])
+                price = 0
+                if len(tds) >= 3:
+                    price_match = re.search(r'([\d,]+)', tds[2])
+                    if price_match:
+                        price = int(price_match.group(1).replace(',', ''))
+                    
+                items.append({
+                    "name": name,
+                    "rate": rate,
+                    "price": price,
+                    "market": MARKET_NAMES.get(sosok, ""),
+                    "sector": get_sector(name)
+                })
+            return items
+        except Exception as e:
+            print(f"❌ [비상망 에러 - {'코스피' if sosok == 0 else '코스닥'}]: {e}")
+            return []
+    
+    # 코스피(0)와 코스닥(1) 양쪽 모두 크롤링하여 합침
+    kospi_data = crawl_naver_rise(0)
+    kosdaq_data = crawl_naver_rise(1)
+    result = kospi_data + kosdaq_data
+    
+    if result:
+        print(f"✅ [비상망] 네이버에서 코스피 {len(kospi_data)}개 + 코스닥 {len(kosdaq_data)}개 = 총 {len(result)}개 종목 (필터링 완료)")
+    return result
 
 
 # ==========================================
@@ -256,7 +306,6 @@ def update_cache_loop():
             
         if new_data:
             new_data.sort(key=lambda x: x["rate"], reverse=True)
-            cached_data = new_data[:30]
             
             # 🌟 상한가(29.9% 이상) 종목 감지 및 선착순 기록
             current_time = time.strftime("%H:%M:%S")
@@ -269,13 +318,18 @@ def update_cache_loop():
                         "name": stock["name"],
                         "time": current_time,
                         "rate": stock["rate"],
-                        "sector": stock["sector"] # 섹터 정보 추가
+                        "market": stock["market"],
+                        "sector": stock["sector"]
                     })
                     limit_up_names.append(stock["name"])
                     changed = True
             
             if changed:
                 save_data()
+            
+            # 🚫 상한가(29.9% 이상) 종목은 차트에서 제외 (명예의 전당에만 표시)
+            filtered = [s for s in new_data if s["rate"] < 29.9]
+            cached_data = filtered[:30]
             
         time.sleep(5)
 

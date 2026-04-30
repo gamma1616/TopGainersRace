@@ -1,0 +1,409 @@
+/Users/g/gcode/stock_race_dashboard/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/g/gcode/stock_race_dashboard/main.py:331: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+INFO:     Will watch for changes in these directories: ['/Users/g/gcode/stock_race_dashboard']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [23740] using StatReload
+/Users/g/gcode/stock_race_dashboard/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [23742]
+INFO:     Waiting for application startup.
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+INFO:     Application startup complete.
+    self.run()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/threading.py", line 910, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/g/gcode/stock_race_dashboard/main.py", line 296, in update_cache_loop
+    if KIS_APP_KEY and KIS_APP_SECRET:
+NameError: name 'KIS_APP_SECRET' is not defined
+🚀 서버 가동 완료! 데이터를 수집하기 시작합니다.
+INFO:     127.0.0.1:59908 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59908 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59908 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59908 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59908 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59908 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59908 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59908 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59908 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59908 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59908 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59908 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59910 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59910 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59910 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59910 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59910 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59910 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59910 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60323 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59976 - "GET /api/data HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [23742]
+/Users/g/gcode/stock_race_dashboard/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:     Started server process [28817]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+🚀 서버 가동 완료! 데이터를 수집하기 시작합니다.
+✅ [성공] 한투 API 접근 토큰 발급 완료!
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 330개 + 코스닥 584개 = 총 914개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 330개 + 코스닥 584개 = 총 914개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 330개 + 코스닥 584개 = 총 914개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 330개 + 코스닥 583개 = 총 913개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 338개 + 코스닥 587개 = 총 925개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 583개 = 총 920개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 582개 = 총 919개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 582개 = 총 919개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 582개 = 총 919개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 582개 = 총 919개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 582개 = 총 919개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 582개 = 총 919개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 582개 = 총 919개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 582개 = 총 919개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 336개 + 코스닥 581개 = 총 917개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 340개 + 코스닥 574개 = 총 914개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 573개 = 총 910개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 570개 = 총 907개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 570개 = 총 907개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 570개 = 총 907개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 570개 = 총 907개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 570개 = 총 907개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 570개 = 총 907개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 570개 = 총 907개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 337개 + 코스닥 570개 = 총 907개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 333개 + 코스닥 569개 = 총 902개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 333개 + 코스닥 563개 = 총 896개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 333개 + 코스닥 561개 = 총 894개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 561개 = 총 893개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 561개 = 총 893개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 561개 = 총 893개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 561개 = 총 893개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 561개 = 총 893개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 561개 = 총 893개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 561개 = 총 893개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 561개 = 총 893개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 331개 + 코스닥 557개 = 총 888개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 553개 = 총 885개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 552개 = 총 884개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 552개 = 총 884개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 552개 = 총 884개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 552개 = 총 884개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 552개 = 총 884개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 552개 = 총 884개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 552개 = 총 884개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 552개 = 총 884개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 551개 = 총 883개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 332개 + 코스닥 552개 = 총 884개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 330개 + 코스닥 548개 = 총 878개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 
+✅ [비상망] 네이버에서 코스피 329개 + 코스닥 547개 = 총 876개 종목 (필터링 완료)
+❌ [통신 실패 - J]: 상태코드 404, 내용: 

@@ -218,7 +218,7 @@
                 // 가로 모드: 높이가 낮으므로 종목 수를 줄여 쾌적하게 보여줌
                 return {
                     isMobile: true,
-                    gridLeft: 140,      // 섹터명 표시를 위해 여백 확장
+                    gridLeft: 140,      // 시장+섹터 표시를 위해 여백 확장
                     gridRight: 50,
                     fontSize: 12,
                     maxBars: 7 // 상위 8개만 표시
@@ -227,7 +227,7 @@
                 // 세로 모드 모바일
                 return {
                     isMobile: true,
-                    gridLeft: 100,      // 섹터명 표시를 위해 여백 확장
+                    gridLeft: 130,      // 시장+섹터 표시를 위해 여백 확장
                     gridRight: 40,
                     fontSize: 11,
                     maxBars: 14 // 상위 15개 표시
@@ -236,7 +236,7 @@
                 // PC 또는 태블릿
                 return {
                     isMobile: false,
-                    gridLeft: 170,      // 섹터명 표시를 위해 여백 확장
+                    gridLeft: 200,      // 시장+섹터 표시를 위해 여백 확장
                     gridRight: 60,
                     fontSize: 16,
                     maxBars: 29 // 상위 30개 표시
@@ -314,14 +314,17 @@
                     if (json.limit_up) {
                         const listDiv = document.getElementById('limit-up-list');
                         if (json.limit_up.length > 0) {
-                            listDiv.innerHTML = json.limit_up.map((s, idx) => `
-                                <div style="background: var(--card-bg); border: 1px solid #ffd700; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
-                                    <span style="color: #ffd700; font-weight: bold;">${idx + 1}위</span> 
-                                    <span style="color: #00d2ff; font-size: 0.7rem;">[${s.sector || '일반'}]</span>
-                                    <span style="color: var(--text-color); font-weight: 500;">${s.name}</span>
-                                    <span style="color: var(--sub-text); font-size: 0.7rem;">(${s.time})</span>
-                                </div>
-                            `).join('');
+                            listDiv.innerHTML = json.limit_up.map((s, idx) => {
+                                const sectorText = s.sector && s.sector !== '일반' ? ` | ${s.sector}` : '';
+                                return `
+                                    <div style="background: var(--card-bg); border: 1px solid #ffd700; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
+                                        <span style="color: #ffd700; font-weight: bold;">${idx + 1}위</span> 
+                                        <span style="color: #00d2ff; font-size: 0.7rem;">[${s.market || ''}${sectorText}]</span>
+                                        <span style="color: var(--text-color); font-weight: 500;">${s.name}</span>
+                                        <span style="color: var(--sub-text); font-size: 0.7rem;">(${s.time})</span>
+                                    </div>
+                                `;
+                            }).join('');
                         }
                     }
 
@@ -339,8 +342,11 @@
                         };
                     });
                     
-                    // [섹터] 종목명 형식으로 추출하여 Y축 이름표로 설정합니다.
-                    const stockNames = json.data.map(item => `[${item.sector || '일반'}] ${item.name}`);
+                    // [시장 | 섹터] 종목명 형식으로 추출하여 Y축 이름표로 설정합니다. ('일반' 섹터는 제외하여 깔끔하게 표시)
+                    const stockNames = json.data.map(item => {
+                        const sectorText = item.sector && item.sector !== '일반' ? ` | ${item.sector}` : '';
+                        return `[${item.market || ''}${sectorText}] ${item.name}`;
+                    });
                     
                     myChart.setOption({
                         yAxis: {
