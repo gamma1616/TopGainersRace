@@ -236,7 +236,7 @@
                 // PC 또는 태블릿
                 return {
                     isMobile: false,
-                    gridLeft: 240,      // 시장+섹터 표시를 위해 여백 확장 (긴 종목명 대비)
+                    gridLeft: 180,      // 종목명 라벨이 충분히 보이도록 마진 확보
                     gridRight: 60,
                     fontSize: 16,
                     maxBars: 29 // 상위 30개 표시
@@ -342,11 +342,8 @@
                         };
                     });
                     
-                    // [시장 | 섹터] 종목명 형식으로 추출하여 Y축 이름표로 설정합니다. ('일반' 섹터는 제외하여 깔끔하게 표시)
-                    const stockNames = json.data.map(item => {
-                        const sectorText = item.sector && item.sector !== '일반' ? ` | ${item.sector}` : '';
-                        return `[${item.market || ''}${sectorText}] ${item.name}`;
-                    });
+                    // [시장] 종목명 형식으로 깔끔하게 표시 (사용자 요청에 따라 시장 정보만 강조)
+                    const stockNames = json.data.map(item => `[${item.market || ''}] ${item.name}`);
                     
                     myChart.setOption({
                         yAxis: {

@@ -192,7 +192,11 @@ def fetch_kis_data():
                     price = int(item.get("stck_prpr", 0))
                     
                     # ETF, ETN, 레버리지, 인버스, 선물, 스팩, 액티브 등 제외 필터링 (가독성 및 순수 주식 랭킹 목적)
-                    exclude_keywords = ["ETF", "ETN", "레버리지", "인버스", "선물", "스팩", "액티브", "KODEX", "TIGER", "ACE", "HANARO", "KBSTAR", "SOL", "ARIRANG", "RISE", "RO"]
+                    exclude_keywords = [
+                        "ETF", "ETN", "레버리지", "인버스", "선물", "스팩", "액티브", 
+                        "KODEX", "TIGER", "ACE", "HANARO", "KBSTAR", "SOL", "ARIRANG", "RISE", "RO",
+                        "KOSEF", "TREX", "SMART", "FOCUS", "KINDEX", "GL", "TR", "USD", "IS"
+                    ]
                     if any(kw in name.upper() for kw in exclude_keywords):
                         continue
                         
@@ -246,7 +250,11 @@ def fetch_fallback_data():
                 name = name_match.group(1).strip()
                 
                 # ETF, ETN, 레버리지, 인버스, 선물, 스팩, 액티브 등 제외 필터링 (순수 주식 랭킹 목적)
-                exclude_keywords = ["ETF", "ETN", "레버리지", "인버스", "선물", "스팩", "액티브", "KODEX", "TIGER", "ACE", "HANARO", "KBSTAR", "SOL", "ARIRANG", "RISE", "RO"]
+                exclude_keywords = [
+                    "ETF", "ETN", "레버리지", "인버스", "선물", "스팩", "액티브", 
+                    "KODEX", "TIGER", "ACE", "HANARO", "KBSTAR", "SOL", "ARIRANG", "RISE", "RO",
+                    "KOSEF", "TREX", "SMART", "FOCUS", "KINDEX", "GL", "TR", "USD", "IS"
+                ]
                 if any(kw in name.upper() for kw in exclude_keywords):
                     continue
                 
