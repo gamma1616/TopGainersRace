@@ -231,43 +231,48 @@ def fetch_fallback_data():
             res.encoding = 'euc-kr'
             html = res.text
             
-            # 각 테이블 행(TR)을 개별적으로 파싱하여 종목명-등락률을 정확히 1:1 매칭
-            rows = re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.DOTALL)
+            # 행(TR) 단위로 분할하여 개별적으로 파싱
+            rows = html.split('</tr>')
             
             items = []
             for row in rows:
-                # 종목명이 있는 행만 처리
+                if 'class="tltle"' not in row:
+                    continue
+                    
                 name_match = re.search(r'class="tltle">([^<]+)</a>', row)
                 if not name_match:
                     continue
                 
                 name = name_match.group(1).strip()
                 
-                # ETF, ETN, 레버리지, 인버스, 선물, 스팩, 액티브 등 제외 필터링
+                # ETF, ETN, 레버리지, 인버스, 선물, 스팩, 액티브 등 제외 필터링 (순수 주식 랭킹 목적)
                 exclude_keywords = ["ETF", "ETN", "레버리지", "인버스", "선물", "스팩", "액티브", "KODEX", "TIGER", "ACE", "HANARO", "KBSTAR", "SOL", "ARIRANG", "RISE", "RO"]
                 if any(kw in name.upper() for kw in exclude_keywords):
                     continue
                 
-                # 해당 행의 TD들을 추출하여 등락률(4번째 숫자 TD) 가져오기
+                # TD 데이터 추출
                 tds = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL)
-                
-                # 등락률은 보통 TD[4]에 있음 (등락률 컬럼)
-                rate = 0.0
-                if len(tds) >= 5:
-                    rate_match = re.search(r'([\d\.]+)%', tds[4])
-                    if rate_match:
-                        rate = float(rate_match.group(1))
-                
-                # 등락률이 0 이하면 상승 종목이 아니므로 건너뜀
-                if rate <= 0:
+                if len(tds) < 5:
                     continue
                 
-                # 현재가 추출 (TD[2])
+                # 등락률 추출 (보통 4-5번째 TD에 위치함, % 기호 기준 검색)
+                rate = 0.0
+                found_rate = False
+                for i in range(3, min(len(tds), 6)):
+                    rate_match = re.search(r'([-+]?[\d\.]+)%', tds[i])
+                    if rate_match:
+                        rate = float(rate_match.group(1))
+                        found_rate = True
+                        break
+                
+                if not found_rate or rate <= 0:
+                    continue
+                
+                # 현재가 추출 (숫자만 추출)
                 price = 0
-                if len(tds) >= 3:
-                    price_match = re.search(r'([\d,]+)', tds[2])
-                    if price_match:
-                        price = int(price_match.group(1).replace(',', ''))
+                price_match = re.search(r'([\d,]+)', tds[2])
+                if price_match:
+                    price = int(price_match.group(1).replace(',', ''))
                     
                 items.append({
                     "name": name,
