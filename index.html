@@ -377,6 +377,9 @@
                                 </div>
                             `;
                         }).join('');
+                    } else {
+                        // 상한가 종목이 모두 이탈한 경우 안내 표시
+                        listDiv.innerHTML = '<span style="color: #555; font-size: 0.8rem;">현재 상한가 종목이 없습니다.</span>';
                     }
                 }
 

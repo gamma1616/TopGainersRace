@@ -82,22 +82,8 @@ VISITOR_FILE = "visitors.json"
 LIMIT_UP_FILE = "limit_up.json"
 visitor_stats = {"today": 0, "total": 0, "last_date": ""}
 
-# 사용자 요청으로 오늘의 상한가 명단 13개를 고정값으로 시작합니다.
-limit_up_stocks = [
-    {"name": "알루코", "time": "09:05:12", "rate": 30.0, "market": "코스피", "sector": "알루미늄"},
-    {"name": "송원산업", "time": "09:12:45", "rate": 30.0, "market": "코스피", "sector": "화학"},
-    {"name": "문배철강", "time": "09:20:10", "rate": 30.0, "market": "코스피", "sector": "철강"},
-    {"name": "한주에이알티", "time": "09:35:22", "rate": 30.0, "market": "코스닥", "sector": "2차전지/장비"},
-    {"name": "대호특수강", "time": "09:48:15", "rate": 30.0, "market": "코스피", "sector": "철강"},
-    {"name": "세아메카닉스", "time": "10:05:30", "rate": 30.0, "market": "코스닥", "sector": "전기차/부품"},
-    {"name": "아주스틸", "time": "10:15:40", "rate": 30.0, "market": "코스피", "sector": "철강"},
-    {"name": "나우IB", "time": "10:42:11", "rate": 30.0, "market": "코스닥", "sector": "창투사"},
-    {"name": "대호특수강우", "time": "11:02:55", "rate": 30.0, "market": "코스피", "sector": "철강"},
-    {"name": "넥스틸", "time": "11:25:34", "rate": 30.0, "market": "코스피", "sector": "철강"},
-    {"name": "포스코스틸리온", "time": "13:10:20", "rate": 30.0, "market": "코스피", "sector": "철강"},
-    {"name": "디케이앤디", "time": "14:05:15", "rate": 30.0, "market": "코스닥", "sector": "의류/피혁"},
-    {"name": "금강철강", "time": "14:50:40", "rate": 30.0, "market": "코스피", "sector": "철강"}
-]
+# 오늘의 상한가 명단 (실시간 데이터로 채워지며, 상한가 이탈 시 자동 제거됩니다)
+limit_up_stocks = []
 
 # ==========================================
 # 1-1. 🌟 시장 시간 헬퍼 함수
@@ -478,13 +464,20 @@ def update_cache_loop():
         if new_data:
             new_data.sort(key=lambda x: x["rate"], reverse=True)
 
-            # 🌟 상한가(29.9% 이상) 종목 감지 및 선착순 기록 (KST 시각 사용)
+            # 🌟 상한가(29.9% 이상) 종목 실시간 갱신
+            #    - 현재 상한가 종목만 명단 유지 (이탈 시 자동 제거)
+            #    - 신규 진입 종목은 선착순 시각으로 추가
             current_time = kst_now().strftime("%H:%M:%S")
-            limit_up_names = [s["name"] for s in limit_up_stocks]
-            changed = False
+            currently_limit_up = {s["name"] for s in new_data if s["rate"] >= 29.9}
+            previous_names = {s["name"] for s in limit_up_stocks}
 
+            # 1. 상한가 이탈 종목 제거
+            limit_up_stocks = [s for s in limit_up_stocks if s["name"] in currently_limit_up]
+
+            # 2. 신규 상한가 종목 추가 (선착순 시각 기록)
+            existing_names = {s["name"] for s in limit_up_stocks}
             for stock in new_data:
-                if stock["rate"] >= 29.9 and stock["name"] not in limit_up_names:
+                if stock["rate"] >= 29.9 and stock["name"] not in existing_names:
                     limit_up_stocks.append({
                         "name": stock["name"],
                         "time": current_time,
@@ -492,10 +485,11 @@ def update_cache_loop():
                         "market": stock["market"],
                         "sector": stock["sector"]
                     })
-                    limit_up_names.append(stock["name"])
-                    changed = True
+                    existing_names.add(stock["name"])
 
-            if changed:
+            # 변경 사항이 있을 때만 파일 저장 (이탈 또는 신규 진입)
+            new_names = {s["name"] for s in limit_up_stocks}
+            if previous_names != new_names:
                 save_data()
 
             # 🚫 상한가(29.9% 이상) 종목은 차트에서 제외 (명예의 전당에만 표시)
