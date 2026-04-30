@@ -1,1 +1,441 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <!-- 모바일 기기에서 화면이 깨지지 않고 딱 맞게 보이도록 하는 설정 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔥 실시간 국내 주식 달리기 시합</title>
+    <!-- ECharts 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --text-color: #ffffff;
+            --sub-text: #aaaaaa;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border-color: #222;
+        }
+        [data-theme='light'] {
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --sub-text: #666666;
+            --card-bg: rgba(0, 0, 0, 0.03);
+            --border-color: #eeeeee;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Pretendard', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        /* 테마 토글 버튼 스타일 */
+        #theme-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        #theme-toggle:hover { transform: scale(1.05); }
 
+        /* 🌟 시장 상태 배지 */
+        #market-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid #555;
+            background: var(--card-bg);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 8px;
+            transition: all 0.3s;
+        }
+        #market-status-badge.open {
+            border-color: #2ed573;
+            box-shadow: 0 0 12px rgba(46, 213, 115, 0.25);
+        }
+        #market-status-badge.closed {
+            border-color: #ff4757;
+            box-shadow: 0 0 12px rgba(255, 71, 87, 0.15);
+        }
+        .market-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .market-dot.open {
+            background: #2ed573;
+            box-shadow: 0 0 8px #2ed573;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        .market-dot.closed { background: #ff4757; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* 🌟 장 마감 시 차트 dimming */
+        #chart-container.market-closed {
+            opacity: 0.55;
+            filter: grayscale(0.3);
+            transition: opacity 0.5s, filter 0.5s;
+        }
+
+        #header {
+            margin-top: 15px;
+            text-align: center;
+            width: 100%;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+        #header h1 {
+            margin: 0;
+            color: #ff4757;
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(255, 71, 87, 0.3);
+        }
+        #header p {
+            color: var(--sub-text);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        #chart-container {
+            width: 65vw;
+            height: 85vh;
+            margin-top: 5px;
+        }
+        /* 스마트폰 세로 화면일 때 설정 */
+        @media (max-width: 600px) {
+            #header h1 { font-size: 1.3rem; }
+            #header p { font-size: 0.8rem; }
+            #market-status-badge { font-size: 0.8rem; padding: 5px 10px; }
+            #chart-container {
+                width: 85vw;
+                height: 80vh;
+            }
+            #theme-toggle {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+                padding: 10px 15px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 테마 전환 버튼 -->
+    <button id="theme-toggle" onclick="toggleTheme()">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">다크 모드</span>
+    </button>
+
+    <div id="header">
+        <div style="display: flex; align-items: baseline; justify-content: center; gap: 15px; flex-wrap: wrap;">
+            <h1>🏃‍♂️ 코스피/코스닥 상승률 랭킹 레이스 (v2)</h1>
+            <div id="visitor-container" style="font-size: 0.85rem; color: #888;">
+                오늘: <span id="today-visitors" style="color: #ff4757; font-weight: bold;">0</span>명 |
+                누적: <span id="total-visitors" style="color: var(--text-color); font-weight: bold;">0</span>명
+            </div>
+        </div>
+        <p>종목들의 달리기 시합을 응원합니다!</p>
+
+        <!-- 🌟 시장 상태 배지 -->
+        <div id="market-status-badge">
+            <span class="market-dot closed"></span>
+            <span id="market-status-text">상태 확인 중...</span>
+        </div>
+
+        <p id="current-time" style="color: #00d2ff; font-weight: bold; font-size: 1.1rem; margin-top: 10px;"></p>
+
+        <!-- 🏆 상한가 명예의 전당 (선착순) -->
+        <div id="limit-up-section" style="margin: 20px auto 0 auto; width: 95%; max-width: 900px; text-align: center;">
+            <div style="font-size: 1rem; color: #ffd700; font-weight: bold; margin-bottom: 10px; text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);">
+                🏆 오늘의 상한가 명예의 전당 (선착순)
+            </div>
+            <div id="limit-up-list" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; min-height: 30px;">
+                <span style="color: #555; font-size: 0.8rem;">아직 상한가 종목이 없습니다.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 차트가 그려질 도화지 -->
+    <div id="chart-container"></div>
+
+    <script>
+        // 테마 전환 기능
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            if (newTheme === 'light') {
+                themeIcon.innerText = '☀️';
+                themeText.innerText = '화이트 모드';
+            } else {
+                themeIcon.innerText = '🌙';
+                themeText.innerText = '다크 모드';
+            }
+
+            updateChartTheme(newTheme);
+        }
+
+        function updateChartTheme(theme) {
+            const isLight = theme === 'light';
+            myChart.setOption({
+                xAxis: {
+                    axisLabel: { color: isLight ? '#666' : '#aaa' },
+                    splitLine: { lineStyle: { color: isLight ? '#eee' : '#333' } }
+                },
+                yAxis: {
+                    axisLabel: { color: isLight ? '#1a1a1a' : '#ffffff' }
+                },
+                series: [{
+                    label: { color: isLight ? '#1a1a1a' : '#ffffff' }
+                }]
+            });
+        }
+
+        // 현재 시각을 업데이트하는 함수
+        function updateClock() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const timeString = `${year}년 ${month}월 ${day}일 ${hours}:${minutes}:${seconds}`;
+            document.getElementById('current-time').innerText = timeString;
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        const chartDom = document.getElementById('chart-container');
+        const myChart = echarts.init(chartDom, 'dark', { renderer: 'canvas' });
+
+        const colors = [
+            '#ff4757', '#ffa502', '#2ed573', '#1e90ff', '#ff6b81',
+            '#eccc68', '#ff7f50', '#a4b0be', '#5352ed', '#ff9f43'
+        ];
+
+        function getColorForStock(stockName) {
+            let hash = 0;
+            for (let i = 0; i < stockName.length; i++) {
+                hash = stockName.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return colors[Math.abs(hash) % colors.length];
+        }
+
+        function getChartConfig() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const isMobile = width < 600;
+            const isLandscape = width > height && height < 500;
+
+            // 30개 종목 모두 표시 + [시장 | 섹터] 종목명 형식 수용을 위해 라벨 영역(gridLeft) 확대
+            if (isLandscape) {
+                return { isMobile: true, gridLeft: 135, gridRight: 35, fontSize: 7, maxBars: 29 };
+            } else if (isMobile) {
+                return { isMobile: true, gridLeft: 145, gridRight: 30, fontSize: 8, maxBars: 29 };
+            } else {
+                return { isMobile: false, gridLeft: 210, gridRight: 50, fontSize: 11, maxBars: 29 };
+            }
+        }
+
+        let config = getChartConfig();
+        const option = {
+            backgroundColor: 'transparent',
+            grid: { top: 10, bottom: 20, left: config.gridLeft, right: config.gridRight },
+            xAxis: {
+                max: 'dataMax',
+                axisLabel: { formatter: '{value}%', color: '#aaaaaa' },
+                splitLine: { show: true, lineStyle: { color: '#333', type: 'dashed' } }
+            },
+            yAxis: {
+                type: 'category',
+                inverse: true,
+                max: config.maxBars,
+                axisLabel: { show: true, fontSize: config.fontSize, color: '#ffffff', fontWeight: 'bold' },
+                animationDuration: 300,
+                animationDurationUpdate: 300
+            },
+            series: [{
+                realtimeSort: true,
+                name: '상승률',
+                type: 'bar',
+                data: [],
+                label: {
+                    show: true,
+                    position: 'right',
+                    valueAnimation: true,
+                    formatter: function(params) { return params.value.toFixed(2) + '%'; },
+                    color: '#ffffff',
+                    fontSize: Math.max(8, config.fontSize - 1),
+                    fontWeight: 'bold'
+                },
+                itemStyle: { borderRadius: [0, 10, 10, 0] }
+            }],
+            animationDuration: 0,
+            animationDurationUpdate: 3000,
+            animationEasing: 'linear',
+            animationEasingUpdate: 'linear'
+        };
+        myChart.setOption(option);
+
+        // 🌟 시장 상태 표시 + 폴링 간격 동적 조절
+        let pollIntervalId = null;
+        let currentPollInterval = 0;
+        let lastMarketIsOpen = null;
+
+        function updateMarketStatusUI(market) {
+            const badge = document.getElementById('market-status-badge');
+            const textEl = document.getElementById('market-status-text');
+            const dotEl = badge.querySelector('.market-dot');
+            const chartContainer = document.getElementById('chart-container');
+
+            if (market.is_open) {
+                badge.classList.add('open');
+                badge.classList.remove('closed');
+                dotEl.classList.add('open');
+                dotEl.classList.remove('closed');
+                textEl.innerHTML = `<span style="color:#2ed573;font-weight:bold;">${market.message}</span>`;
+                chartContainer.classList.remove('market-closed');
+            } else {
+                badge.classList.add('closed');
+                badge.classList.remove('open');
+                dotEl.classList.add('closed');
+                dotEl.classList.remove('open');
+                textEl.innerHTML = `<span style="color:#ff4757;font-weight:bold;">${market.message}</span>` +
+                    `<span style="color:var(--sub-text); margin-left:8px; font-size:0.85em;">| 다음 개장: ${market.next_open_kst}</span>`;
+                chartContainer.classList.add('market-closed');
+            }
+
+            // 폴링 간격 조절: 정규장 3초, 장 외 60초
+            const desiredInterval = market.is_open ? 3000 : 60000;
+            if (desiredInterval !== currentPollInterval) {
+                if (pollIntervalId) clearInterval(pollIntervalId);
+                currentPollInterval = desiredInterval;
+                pollIntervalId = setInterval(fetchAndUpdateData, desiredInterval);
+                console.log(`[폴링 간격 조정] ${desiredInterval / 1000}초`);
+            }
+
+            lastMarketIsOpen = market.is_open;
+        }
+
+        async function fetchAndUpdateData() {
+            try {
+                const response = await fetch('/api/data');
+                const json = await response.json();
+
+                // 🌟 시장 상태 갱신 (success/waiting/closed_no_data 모든 경우 처리)
+                if (json.market) {
+                    updateMarketStatusUI(json.market);
+                }
+
+                // 방문자 수 업데이트
+                if (json.visitors) {
+                    document.getElementById('today-visitors').innerText = json.visitors.today.toLocaleString();
+                    document.getElementById('total-visitors').innerText = json.visitors.total.toLocaleString();
+                }
+
+                // 상한가 명예의 전당 업데이트
+                if (json.limit_up) {
+                    const listDiv = document.getElementById('limit-up-list');
+                    if (json.limit_up.length > 0) {
+                        listDiv.innerHTML = json.limit_up.map((s, idx) => {
+                            const sectorText = s.sector && s.sector !== '일반' ? ` | ${s.sector}` : '';
+                            return `
+                                <div style="background: var(--card-bg); border: 1px solid #ffd700; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
+                                    <span style="color: #ffd700; font-weight: bold;">${idx + 1}위</span>
+                                    <span style="color: #00d2ff; font-size: 0.7rem;">[${s.market || ''}${sectorText}]</span>
+                                    <span style="color: var(--text-color); font-weight: 500;">${s.name}</span>
+                                    <span style="color: var(--sub-text); font-size: 0.7rem;">(${s.time})</span>
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        // 상한가 종목이 모두 이탈한 경우 안내 표시
+                        listDiv.innerHTML = '<span style="color: #555; font-size: 0.8rem;">현재 상한가 종목이 없습니다.</span>';
+                    }
+                }
+
+                // 차트 데이터 갱신 (cached_data가 있을 때만)
+                if (json.status === 'success' && json.data && json.data.length > 0) {
+                    const chartData = json.data.map(item => ({
+                        value: item.rate,
+                        name: item.name,
+                        itemStyle: { color: getColorForStock(item.name) }
+                    }));
+                    const stockNames = json.data.map(item => {
+                        const sectorText = item.sector && item.sector !== '일반' ? ` | ${item.sector}` : '';
+                        return `[${item.market || ''}${sectorText}] ${item.name}`;
+                    });
+                    myChart.setOption({
+                        yAxis: { data: stockNames },
+                        series: [{ data: chartData }]
+                    });
+                }
+            } catch (error) {
+                console.error("데이터 가져오기 실패:", error);
+            }
+        }
+
+        // 첫 호출
+        fetchAndUpdateData();
+        // updateMarketStatusUI 안에서 setInterval을 적절한 주기로 설정함
+
+        // 폰을 돌리거나 창 크기를 조절할 때 차트 설정을 다시 맞춥니다.
+        window.addEventListener('resize', function() {
+            config = getChartConfig();
+            myChart.setOption({
+                grid: { left: config.gridLeft, right: config.gridRight },
+                yAxis: { max: config.maxBars, axisLabel: { fontSize: config.fontSize } },
+                series: [{ label: { fontSize: Math.max(8, config.fontSize - 1) } }]
+            });
+            myChart.resize();
+        });
+    </script>
+
+    <div id="footer" style="margin-top: 50px; padding: 40px 10px; width: 100%; text-align: center; color: var(--sub-text); border-top: 1px solid var(--border-color); font-size: 0.8rem; line-height: 1.6; background: var(--card-bg);">
+        <div style="font-weight: bold; color: var(--text-color); margin-bottom: 5px; font-size: 0.95rem; letter-spacing: 1px;">
+            감마렉스맥스 (Gamma Lexmax)
+        </div>
+        <div style="margin-bottom: 15px;">
+            광고문의 : <a href="mailto:lexmax1616@gmail.com" style="color: #00d2ff; text-decoration: none;">lexmax1616@gmail.com</a>
+        </div>
+        <div style="max-width: 800px; margin: 0 auto; color: var(--sub-text); padding: 0 20px;">
+            <strong>[투자 면책 조항]</strong><br>
+            본 서비스에서 제공하는 모든 정보는 투자 판단을 위한 참고용이며, 데이터 제공 지연이나 오류가 발생할 수 있습니다.
+            투자에 대한 최종 결정과 책임은 투자자 본인에게 있으며, 본 서비스는 어떠한 경우에도 투자 결과에 대한 법적 책임을 지지 않습니다.
+        </div>
+        <div style="margin-top: 25px; font-size: 0.7rem; color: #555;">
+            &copy; 2026 Gamma Lexmax. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>
